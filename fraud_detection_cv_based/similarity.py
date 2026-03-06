@@ -24,30 +24,30 @@ def embed_one(img: Image.Image, model: torch.nn.Module, transform, device) -> to
 def rank_topk(
     query_path: str,
     gallery_paths: List[str],
-    model_name: str = "mobilenetv3_small_100",  # 轻量，CPU 更快；也可换 "resnet50"
+    model_name: str = "mobilenetv3_small_100",  
     device: str = "cpu"
 ) -> List[Tuple[str, float]]:
     device = torch.device(device)
 
-    # 1) 模型（去掉分类头，直接输出特征）
+    
     model = timm.create_model(model_name, pretrained=True, num_classes=0)
     model.eval().to(device)
 
-    # 2) 预处理（timm 自动给出）
+    
     cfg = resolve_data_config({}, model=model)
     transform = create_transform(**cfg)
 
-    # 3) query embedding
+    
     q_emb = embed_one(load_rgb(query_path), model, transform, device).numpy()
 
-    # 4) 逐个算相似度（10 张图非常快）
+    
     results = []
     for p in gallery_paths:
         if not os.path.exists(p):
             continue
         try:
             g_emb = embed_one(load_rgb(p), model, transform, device).numpy()
-            sim = float(np.dot(q_emb, g_emb))  # 都 normalize 了，dot == cosine similarity
+            sim = float(np.dot(q_emb, g_emb))  
             results.append((p, sim))
         except Exception:
             continue
