@@ -1,0 +1,27 @@
+{
+  "onboarded": true,
+  "onboarded_at": "2026-03-06T19:20:20.061Z",
+  "name": "Clara",
+  "brand_name": "Arcadia",
+  "phone": "160924606447760@lid",
+  "craft_category": "hand-knotted fiber art wearable",
+  "materials": "Macrame dress with cotton threads",
+  "hours_per_piece": 12,
+  "positioning": "luxury",
+  "brand_statement": "A hand-knotted macramé wearable that transforms ancient fiber art into a sculptural heirloom, where organic wood and cotton converge in quiet mastery.",
+  "target_audience": "Discerning collectors and design connoisseurs who seek wearable art with soul, provenance, and architectural presence.",
+  "tone_of_voice": [
+    "refined",
+    "understated",
+    "authoritative"
+  ],
+  "price_positioning": "£1,200–£1,600 — justifies the 12-hour artisan process, rare integration of wood and knotwork, and exclusivity of handmade luxury.",
+  "key_message": "Wearable sculpture. Time-bound craft. Once-owned, forever-kept.",
+  "brand_history": [
+    {
+      "date": "2026-03-06T19:20:20.063Z",
+      "positioning": "luxury",
+      "reason": "Initial onboarding"
+    }
+  ]
+}
