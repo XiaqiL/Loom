@@ -39,7 +39,7 @@ def load_price_map(csv_path: str) -> dict:
 
 def image_quality_metrics(pil_img) -> dict:
     """
-    轻量质量指标：brightness + sharpness
+    brightness + sharpness
     """
     # brightness
     gray = np.array(pil_img.convert("L"))
