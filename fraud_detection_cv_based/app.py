@@ -13,8 +13,8 @@ import timm
 from timm.data import resolve_data_config, create_transform
 
 
-GALLERY_DIR = "imgs"                 # 你的对比图库目录
-MODEL_NAME = "mobilenetv3_small_100"    # 轻量模型，CPU 友好；想更准可换 "resnet50"
+GALLERY_DIR = "imgs"                 
+MODEL_NAME = "mobilenetv3_small_100"    
 
 def load_rgb(path: str) -> Image.Image:
     return Image.open(path).convert("RGB")
@@ -45,8 +45,6 @@ def image_quality_metrics(pil_img) -> dict:
     gray = np.array(pil_img.convert("L"))
     brightness = float(gray.mean())  # 0~255
 
-    # sharpness: Laplacian variance (越大越清晰)
-    # 需要 opencv-python
     lap_var = float(cv2.Laplacian(gray, cv2.CV_64F).var())
 
     return {"brightness": brightness, "sharpness": lap_var}
@@ -75,10 +73,8 @@ def compute_pricing_from_similar(
     price_map: dict,       # {"1.jpg": 199, ...}
     temperature: float = 0.1
 ):
-    """
-    输入 TopK 相似图结果 + 价格表 -> 输出参考价、区间、置信度、用于解释的明细
-    """
-    # 取出有价格的项
+    
+    
     items = []
     for p, sim in topk_results:
         fn = os.path.basename(p)
@@ -86,7 +82,7 @@ def compute_pricing_from_similar(
             items.append((p, float(sim), float(price_map[fn])))
 
     if len(items) == 0:
-        return None  # 没有可用价格
+        return None  
 
     sims = np.array([x[1] for x in items], dtype=np.float32)  # cosine
     # cosine -> [0,1]
@@ -94,7 +90,7 @@ def compute_pricing_from_similar(
 
     prices = np.array([x[2] for x in items], dtype=np.float32)
 
-    # 权重
+    
     w = softmax_weights(s, temperature=temperature)
 
     p_base = weighted_mean(prices, w)
@@ -102,11 +98,11 @@ def compute_pricing_from_similar(
 
     s_top1 = float(s.max())
     s_topk = float(s.min())
-    # 置信度（可解释：最像的比最不像的“拉开多少”）
+    
     conf = (s_top1 - s_topk) / 0.30
     conf = float(np.clip(conf, 0.0, 1.0))
 
-    # 区间：conf 越低，区间越宽
+    
     width = spread * (1.0 + (1.0 - conf))
     low = float(max(0.0, p_base - width))
     high = float(p_base + width)
@@ -133,28 +129,26 @@ def compute_pricing_from_similar(
 
 
 def apply_quality_adjustment(pricing: dict, quality: dict):
-    """
-    demo 风格的轻量修正：清晰度/亮度影响置信度和最终价格的微调
-    """
+    
     p = pricing["base_price"]
     conf = pricing["confidence"]
 
     brightness = quality["brightness"]  # 0~255
-    sharpness = quality["sharpness"]    # 通常几十到几千不等
+    sharpness = quality["sharpness"]    
 
-    # 亮度惩罚：太暗<60 或太亮>210 降低置信度
+    
     bright_penalty = 1.0
     if brightness < 60 or brightness > 210:
         bright_penalty = 0.85
 
-    # 清晰度惩罚：太模糊（阈值你可以按你的图片调）
+    
     sharp_penalty = 1.0
     if sharpness < 80:
         sharp_penalty = 0.80
 
     conf2 = float(np.clip(conf * bright_penalty * sharp_penalty, 0.0, 1.0))
 
-    # 价格轻微调整：质量差略压价（最多 -5%）
+    
     q_factor = 1.0
     if bright_penalty < 1.0:
         q_factor *= 0.98
@@ -163,7 +157,7 @@ def apply_quality_adjustment(pricing: dict, quality: dict):
 
     p2 = float(p * q_factor)
 
-    # 区间也随 conf2 变宽/变窄（简单处理：按比例放大原区间宽度）
+    
     mid = p2
     half = (pricing["price_high"] - pricing["price_low"]) / 2.0
     # conf2 越低 half 越大
@@ -202,9 +196,7 @@ def load_model_and_transform(model_name: str = MODEL_NAME, device_str: str = "cp
 
 @st.cache_resource
 def build_gallery_embeddings(gallery_dir: str, model_name: str = MODEL_NAME):
-    """
-    启动时把 gallery 的 embedding 预先算好（10 张图很快），上传时就只算 query。
-    """
+
     model, transform, device = load_model_and_transform(model_name, "cpu")
     paths = sorted(
         glob.glob(os.path.join(gallery_dir, "*.*"))
@@ -229,7 +221,6 @@ def build_gallery_embeddings(gallery_dir: str, model_name: str = MODEL_NAME):
 
 
 def topk_similar(query_emb: np.ndarray, gallery_paths: List[str], gallery_embs: np.ndarray, k: int = 5):
-    # gallery_embs 和 query_emb 都是 L2 normalize 过的，所以 dot == cosine similarity
     sims = gallery_embs @ query_emb.astype(np.float32)  # [N]
     idx = np.argsort(-sims)[:k]
     return [(gallery_paths[i], float(sims[i])) for i in idx]
@@ -240,7 +231,7 @@ def main():
     st.title("🔍Fraud Detection for Your Product")
 
     if not os.path.isdir(GALLERY_DIR):
-        st.error(f"找不到图库目录：{GALLERY_DIR}（请创建并放入你的10张图）")
+        st.error(f"Cannot find：{GALLERY_DIR}")
         st.stop()
 
     model, transform, device = load_model_and_transform(MODEL_NAME, "cpu")
@@ -263,15 +254,14 @@ def main():
 
             q_emb = embed_one(q_img, model, transform, device)
             results = topk_similar(q_emb, gallery_paths, gallery_embs, k=top_k)
-            # 读取价格表（建议放到 @st.cache_resource 里）
             price_map = load_price_map("prices.csv")
 
             pricing = compute_pricing_from_similar(results, price_map, temperature=0.12)
 
             if pricing is None:
-                st.warning("TopK 结果里没有找到可用的价格（请检查 prices.csv 的 filename 是否匹配）。")
+                st.warning("TopK not found")
             else:
-                quality = image_quality_metrics(q_img)  # 可选：不想依赖 opencv 就别用
+                quality = image_quality_metrics(q_img)  
                 pricing = apply_quality_adjustment(pricing, quality)
                 st.markdown("## 💰 Pricing")
                 st.metric("Reference Price", f"${pricing['final_price']:.0f}")
@@ -290,15 +280,11 @@ def main():
                     f"Sharpness: {pricing['quality']['sharpness']:.0f}"
                 )
 
-                #st.markdown("### 计算解释（TopK 加权）")
-                #st.dataframe(pricing["details"])
-                #df = pd.DataFrame(pricing["details"])
-                #st.dataframe(df, use_container_width=True, height=260)
-
+        
             with col2:
                 st.subheader(f"Top-{top_k} Results")
-                # 用网格展示
-                grid_cols = st.columns(5)  # 你也可以改成 3/4 等
+               
+                grid_cols = st.columns(5)  
                 for i, (p, score) in enumerate(results):
                     c = grid_cols[i % 5]
                     with c:
