@@ -1,4 +1,4 @@
-# Just in case you are curious about how Agent2 works 🦞
+# Just in case you are curious about how Agent02 works 🦞
 
 ## Overall Architecture
 
