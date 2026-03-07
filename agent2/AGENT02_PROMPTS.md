@@ -1,4 +1,4 @@
-# Agent 02
+# Agent 02 - Research/Rebranding/Revenue Detection Agent 🦞
 
 ## Overview
 
