@@ -13,17 +13,17 @@ Cron job 01:
 
 Cron job 1: OpenClaw Chain of Thought
 
-![image.png](Agent%2002/image%201.png)
+![image.png](assets/image%201.png)
 
-![image.png](Agent%2002/image%202.png)
+![image.png](assets/image%202.png)
 
-![Cron job 01: Whatsapp](Agent%2002/image%203.png)
+![Cron job 01: Whatsapp](assets/image%203.png)
 
 Cron job 01: Whatsapp
 
 *Prompt for Cron job 01:* 
 
-![image.png](Agent%2002/image%204.png)
+![image.png](assets/image%204.png)
 
 ```
 Read `user.md` in the workspace to understand the brand and seller profile.
@@ -48,17 +48,17 @@ After the file is created or updated, send this WhatsApp message to the user:
 
 Cron job 02: 
 
-![Cron job 2: OpenClaw Chain of Thought](Agent%2002/image%205.png)
+![Cron job 2: OpenClaw Chain of Thought](assets/image%205.png)
 
 Cron job 2: OpenClaw Chain of Thought
 
-![Cron job 02: Whatsapp](Agent%2002/image%206.png)
+![Cron job 02: Whatsapp](assets/image%206.png)
 
 Cron job 02: Whatsapp
 
 *Prompt for Cron job 02:* 
 
-![image.png](Agent%2002/image%207.png)
+![image.png](assets/image%207.png)
 
 ```
 Read `user.md` in the workspace to understand the brand profile, target audience, and positioning.
@@ -98,10 +98,10 @@ You may also include 2–4 short bullet points covering:
 
 *OpenClaw Bot conduct market research automatically by searching Etsy Platform*
 
-![image.png](Agent%2002/image%208.png)
+![image.png](assets/image%208.png)
 
-![image.png](Agent%2002/image%209.png)
+![image.png](assets/image%209.png)
 
-![image.png](Agent%2002/image%2010.png)
+![image.png](assets/image%2010.png)
 
-![image.png](Agent%2002/image%2011.png)
+![image.png](assets/image%2011.png)
