@@ -1,4 +1,4 @@
-# Loom
+# Hi!We are Loom 🧶
 Imperial OpenClaw Agent Hackathon
 
 # Artisan Agent 🌿
