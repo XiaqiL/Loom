@@ -2,7 +2,7 @@
 Imperial OpenClaw Agent Hackathon
 
 <p align="center">
-  <img src="assets/image 20.png" alt="Agent 02 Overall Architecture" width="720"/>
+  <img src="assets/image 21.png" alt="Agent 02 Overall Architecture" width="720"/>
 </p>
 
 # Artisan Agent 🌿
