@@ -105,6 +105,17 @@ The final `rebranding.md` should include:
 - pricing benchmark
 - competitor patterns in colors, fabrics/materials, and tags
 - recommendations for pricing, positioning, product development, and rebranding direction
+
+Once the job is done, send a WhatsApp message to the user with a concise summary of the key findings and confirmation that `rebranding.md` has been updated.
+
+Use this format:
+`Weekly market insight saved ✅, current date: {current_date}`
+
+You may also include 2–4 short bullet points covering:
+- notable platform price ranges
+- top seller patterns in colors/fabrics
+- popular tags
+- key pricing or rebranding recommendation
 ```
 
 ### Output File
