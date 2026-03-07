@@ -45,6 +45,7 @@ Agent 02 runs **two cron jobs** in total.
 <p align="center">
   <img src="assets/image.png" alt="Agent 02 Overall Architecture" width="720"/>
 </p>
+
 ### WhatsApp Notification
 <p align="center">
   <img src="assets/image 1.png" alt="Cron Job 01 - OpenClaw Chain of Thought 1" width="48%"/>
@@ -52,8 +53,8 @@ Agent 02 runs **two cron jobs** in total.
 </p>
 
 <p align="center">
-  <img src="assets/image 3.png" alt="Cron Job 01 - WhatsApp" width="520"/>
-  <img src="assets/image 4.png" alt="Cron Job 01 Prompt" width="680"/>
+  <img src="assets/image 3.png" alt="Cron Job 01 - WhatsApp" width="48%"/>
+  <img src="assets/image 4.png" alt="Cron Job 01 Prompt" width="48%"/>
 </p>
 
 ### Prompt
@@ -102,14 +103,11 @@ This cron job ensures that Agent 02 maintains an up-to-date revenue tracking fil
 ### WhatsApp Notification
 
 <p align="center">
-  <img src="assets/image 6.png" alt="Cron Job 02 - WhatsApp" width="520"/>
+  <img src="assets/image 6.png" alt="Cron Job 02 - WhatsApp" width="48%"/>
+  <img src="assets/image 7.png" alt="Cron Job 02 Prompt" width="48%"/> 
 </p>
 
 ### Prompt
-
-<p align="center">
-  <img src="assets/image 7.png" alt="Cron Job 02 Prompt" width="680"/>
-</p>
 
 ```text
 Read `user.md` in the workspace to understand the brand profile, target audience, and positioning.
