@@ -1,3 +1,0 @@
-record_id,product_listing,sku,selling_price_gbp,units_sold,revenue_generated_gbp,reporting_period_start,reporting_period_end,reporting_period,platform,shop_name,currency,data_source,latest_update_timestamp
-ART-TX-001-SHOPIFY-2026-03-07,First piece — Avant-garde wearable textile art,ART-TX-001,1200.00,1,1200.00,2026-03-07,2026-03-07,2026-03-07 to 2026-03-07,Shopify,Miao,GBP,simulated_from_artisan_profile_and_product_listing_log,2026-03-07T19:26:27.464Z
-ART-CR-002-ETSY-2026-03-07,hand-sculpted avant-garde wearable art in wood and silk-linen,ART-CR-002,780.00,1,780.00,2026-03-07,2026-03-07,2026-03-07 to 2026-03-07,Etsy,Miao,GBP,simulated_from_artisan_profile_and_product_listing_log,2026-03-07T19:29:26.015Z
