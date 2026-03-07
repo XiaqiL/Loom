@@ -1,6 +1,10 @@
 # Hi! We are Loom 🧶
 Imperial OpenClaw Agent Hackathon
 
+<p align="center">
+  <img src="assets/image 20.png" alt="Agent 02 Overall Architecture" width="720"/>
+</p>
+
 # Artisan Agent 🌿
 
 A two-agent WhatsApp system for independent craftspeople built on OpenClaw🦞 and Flock.io. Agent 1 onboards makers via WhatsApp and generates brand profiles and e-commerce listings. Agent 2 runs weekly on a cron to scrape competitor data, collect sales metrics, and deliver personalised market intelligence newsletters back through WhatsApp.
