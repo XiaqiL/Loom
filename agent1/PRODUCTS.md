@@ -1,29 +1,79 @@
 # Product Listing Log
 
-## First piece — Hand-woven oak swill basket
-- date_listed: 2026-03-06T21:57:06.840Z
-- category: Hand-woven oak swill basket
-- materials: Split oak becomes flexible strips, then a tough working basket — built for land-based life and long use.
-- hours: 10
-- price_recommended: £75–£95
-- price_set: —
+## Satin Scrunchie Set
+- date_listed: 2026-03-07T00:00:00.000Z
+- sku: LT-SS-001
+- category: Hair Accessories
+- materials: Satin
+- hours: —
+- price_recommended: —
+- price_set: £14.99
 - positioning: everyday
+- variants: Blush Pink, Ivory, Sage, Champagne
+- size: Standard
+- sales_channels: Shopify, Etsy, Instagram Shop
 - description: —
 - etsy_tags: —
 - shopify_tags: —
 - photo_direction: —
+- notes: Best-selling giftable item, often purchased in bundles
 
 ---
 
-## Handmade oak swill basket, split wood weave, natural tan or weathered brown
-- date_listed: 2026-03-06T22:01:51.001Z
-- category: Oak Swill Basket
-- materials: Split oak becomes flexible strips, then a tough working basket — built for land-based life and long use.
-- hours: 10
-- price_recommended: £85 — reflects 10 hours of skilled handcraft and premium, long-lasting split oak
-- price_set: —
+## Linen Everyday Tote Bag
+- date_listed: 2026-03-07T00:00:00.000Z
+- sku: LT-TB-002
+- category: Bags
+- materials: Linen-canvas blend
+- hours: —
+- price_recommended: —
+- price_set: £24.99
 - positioning: everyday
-- description: Woven from the heart of the oak, this swill basket begins as solid timber split by hand into supple ribbons—a centuries-old craft known as riving. Each strip is carefully steamed and bent, then woven with precision to create a vessel built for a lifetime of use. This isn't just a basket; it's a testament to slow making, shaped by ten hours of quiet focus and deep respect for material. Crafted using traditional techniques passed through generations, the robust 'spelk' weave gives strength without sacrificing grace, while the solid steam-bent rim ensures lasting resilience. Its ergonomic scooped shape fits naturally in your hands, perfect for gathering firewood, storing kindling, or holding garden harvests. Finished in either warm tan or soft weathered brown, the oak ages beautifully with time, deepening in character alongside your home. Thoughtfully made for those who value simplicity, durability, and the quiet beauty of handmade objects. Bring this piece into your everyday — a functional heirloom that only gets better with age.
-- etsy_tags: handmade oak basket, swill basket, split oak basket, wooden storage basket, artisan woven basket, natural home goods, heritage craft, oak weaving, sustainable home decor, rustic kitchen basket, garden harvesting basket, steam bent wood, durable wooden basket
-- shopify_tags: oak, handmade, storage, basket, woven, artisan, durable, natural
-- photo_direction: Photograph in soft natural light to highlight wood grain and texture; style in a real-life setting like a hearth or garden to show function; capture close-ups of the woven spelk detail and steam-bent rim to emphasise craftsmanship
+- variants: Natural Beige, Olive, Charcoal
+- size: 38cm x 42cm
+- sales_channels: Shopify, Etsy
+- description: —
+- etsy_tags: —
+- shopify_tags: —
+- photo_direction: —
+- notes: Popular among customers looking for practical minimalist style
+
+---
+
+## Embroidered Cosmetic Pouch
+- date_listed: 2026-03-07T00:00:00.000Z
+- sku: LT-CP-003
+- category: Accessories
+- materials: Cotton with embroidered detail
+- hours: —
+- price_recommended: —
+- price_set: £18.50
+- positioning: everyday
+- variants: Cream, Dusty Rose, Sage
+- size: Small, Medium
+- sales_channels: Shopify, Etsy, Instagram Shop
+- description: —
+- etsy_tags: —
+- shopify_tags: —
+- photo_direction: —
+- notes: Strong potential for gifting and personalisation
+
+---
+
+## Lightweight Soft Scarf
+- date_listed: 2026-03-07T00:00:00.000Z
+- sku: LT-SF-004
+- category: Fashion Accessories
+- materials: Polyester-cotton blend
+- hours: —
+- price_recommended: —
+- price_set: £21.99
+- positioning: everyday
+- variants: Oatmeal, Rose Beige, Light Grey
+- size: One size
+- sales_channels: Shopify, Amazon
+- description: —
+- etsy_tags: —
+- shopify_tags: —
+- photo_direction: —
+- notes: Seasonal product with good upsell potential
