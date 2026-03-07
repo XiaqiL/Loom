@@ -9,6 +9,11 @@ Imperial * OpenClaw Agent Hackathon
 
 A two-agent WhatsApp system for independent craftspeople built on OpenClaw🦞 and Flock.io. Agent 1 onboards makers via WhatsApp and generates brand profiles and e-commerce listings. Agent 2 runs weekly on a cron to scrape competitor data, collect sales metrics, and deliver personalised market intelligence newsletters back through WhatsApp.
 
+# Live Demo and Deck
+
+https://docs.google.com/presentation/d/1aCpUBQfBsGO4emhvBzis_PxDB-ebpr-CGVodXzIS33s/edit?usp=sharing
+https://youtu.be/x1LHlCCWAac
+
 ---
 
 ## System Architecture
