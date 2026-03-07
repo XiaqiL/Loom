@@ -9,7 +9,7 @@ Agent 02 has 2 cron tasks in total:
 
 Cron job 01:
 
-![Cron job 1: OpenClaw Chain of Thought](Agent%2002/image.png)
+![Cron job 1: OpenClaw Chain of Thought](assets/image.png)
 
 Cron job 1: OpenClaw Chain of Thought
 
