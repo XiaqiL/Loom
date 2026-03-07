@@ -22,10 +22,6 @@ The output artifacts maintained by Agent 02 are:
 
 The overall workflow is illustrated below:
 
-<p align="center">
-  <img src="assets/image.png" alt="Agent 02 Overall Architecture" width="720"/>
-</p>
-
 ---
 
 ## Input Dependencies
@@ -46,23 +42,21 @@ Agent 02 runs **two cron jobs** in total.
 ## Cron Job 01 — Revenue Detection
 
 ### OpenClaw Chain of Thought
-
+<p align="center">
+  <img src="assets/image.png" alt="Agent 02 Overall Architecture" width="720"/>
+</p>
+### WhatsApp Notification
 <p align="center">
   <img src="assets/image 1.png" alt="Cron Job 01 - OpenClaw Chain of Thought 1" width="48%"/>
   <img src="assets/image 2.png" alt="Cron Job 01 - OpenClaw Chain of Thought 2" width="48%"/>
 </p>
 
-### WhatsApp Notification
-
 <p align="center">
   <img src="assets/image 3.png" alt="Cron Job 01 - WhatsApp" width="520"/>
+  <img src="assets/image 4.png" alt="Cron Job 01 Prompt" width="680"/>
 </p>
 
 ### Prompt
-
-<p align="center">
-  <img src="assets/image 4.png" alt="Cron Job 01 Prompt" width="680"/>
-</p>
 
 ```text
 Read `user.md` in the workspace to understand the brand and seller profile.
