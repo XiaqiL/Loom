@@ -1,0 +1,27 @@
+{
+  "onboarded": true,
+  "onboarded_at": "2026-03-06T20:58:17.366Z",
+  "name": "Zikki",
+  "brand_name": "Mystery mask",
+  "phone": "60405141528663@lid",
+  "craft_category": "Hand-painted Venetian Colombina mask",
+  "materials": "Material: Base：recycled paper pulp, Surface Priming: A Gesso primer layer；Pigments and Finishes：acrylic or tempera paints",
+  "hours_per_piece": 12,
+  "positioning": "heritage",
+  "brand_statement": "A hand-painted Venetian Colombina mask forged in the centuries-old tradition of Venice’s master mascherari, where every brushstroke carries the weight of legacy and the soul of handmade artistry.",
+  "target_audience": "Collectors of cultural artifacts and discerning artisans who seek objects rooted in history, made by hand with reverence for time-honored craft and intimate human touch.",
+  "tone_of_voice": [
+    "reverent",
+    "warm",
+    "grounded"
+  ],
+  "price_positioning": "£120–£160 — reflects 12 hours of meticulous handcraft, premium materials, and generational techniques passed down through Venetian mask-making lineage.",
+  "key_message": "Handmade heritage from Venice’s ancient mascherari tradition",
+  "brand_history": [
+    {
+      "date": "2026-03-06T20:58:17.367Z",
+      "positioning": "heritage",
+      "reason": "Initial onboarding"
+    }
+  ]
+}
