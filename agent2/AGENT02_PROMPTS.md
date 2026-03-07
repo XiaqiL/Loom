@@ -4,8 +4,8 @@
 
 Agent 02 receives the following background documents from Agent 01:
 
-- `USER_PROFILE.md`: brand, business, and seller profile
-- `PRODUCTS.md`: product catalog and listing information
+- `{userid}_USER_PROFILE.md`: brand, business, and seller profile
+- `{userid}_PRODUCTS.md`: product catalog and listing information
 
 Agent 02 runs two weekly cron jobs:
 
@@ -17,7 +17,7 @@ Agent 02 runs two weekly cron jobs:
 ## General Rules
 
 - Use the workspace files as the source of truth.
-- Read `USER_PROFILE.md` and `PRODUCTS.md` before taking action.
+- Read `{userid}_USER_PROFILE.md` and `{userid}_PRODUCTS.md` before taking action.
 - Keep file names exactly as specified.
 - Do not overwrite useful historical data unnecessarily.
 - Always record the latest update timestamp for created or modified outputs.
@@ -34,8 +34,8 @@ Collect the latest weekly financial performance data for the user’s shop(s) an
 ### Prompt
 
 ```text
-Read `USER_PROFILE.md` in the workspace to understand the brand and seller profile.
-Then read `PRODUCTS.md` to review the current product catalog.
+Read `{userid}_USER_PROFILE.md` in the workspace to understand the brand and seller profile.
+Then read `{userid}_PRODUCTS.md` to review the current product catalog.
 
 Contact the user and request the latest financial metrics for their shop(s). Collect, at minimum, the following information for each product or shop where available:
 - product listing / product name
@@ -45,7 +45,7 @@ Contact the user and request the latest financial metrics for their shop(s). Col
 - reporting period
 - platform / shop name
 
-Create or update `revenue_detection.csv` in the workspace:
+Create or update `{userid}_revenue_detection.csv` in the workspace:
 - If `revenue_detection.csv` does not exist, create it.
 - If it already exists, update the relevant rows based on the user’s latest response.
 - Always record the latest update timestamp for each new or modified entry.
@@ -55,10 +55,10 @@ After the file is created or updated, send this WhatsApp message to the user:
 ```
 
 ### Output File
-- `revenue_detection.csv`
+- `{userid}_revenue_detection.csv`
 
 ### Expected Minimum Columns
-Suggested columns for `revenue_detection.csv`:
+Suggested columns for `{userid}_revenue_detection.csv`:
 
 - `update_time`
 - `reporting_week`
@@ -82,8 +82,8 @@ Research the market across major selling platforms, benchmark competitors, and g
 ### Prompt
 
 ```text
-Read `USER_PROFILE.md` in the workspace to understand the brand profile, target audience, and positioning.
-Then read `PRODUCTS.md` to understand the product catalog and core product categories.
+Read `{userid}_USER_PROFILE.md` in the workspace to understand the brand profile, target audience, and positioning.
+Then read `{userid}_PRODUCTS.md` to understand the product catalog and core product categories.
 
 Research comparable products across Etsy, Shopify stores, Instagram shops, Google Shopping, and Amazon for the relevant product categories.
 
@@ -93,14 +93,14 @@ For each platform, gather and summarize:
 3. common colors and fabrics/materials used by the top 10 sellers
 4. popular tags / keywords used in the category
 
-Then review `revenue_detection.csv` in the workspace and use it together with the market research to generate practical rebranding and pricing insights.
+Then review `{userid}_revenue_detection.csv` in the workspace and use it together with the market research to generate practical rebranding and pricing insights.
 
-Create or update `rebranding.md` in the workspace:
+Create or update `{userid}_rebranding.md` in the workspace:
 - If `rebranding.md` does not exist, create it.
 - If it already exists, update it with the latest market insights and recommendations.
 - Always record the latest update timestamp.
 
-The final `rebranding.md` should include:
+The final `{userid}_rebranding.md` should include:
 - market overview by platform
 - pricing benchmark
 - competitor patterns in colors, fabrics/materials, and tags
@@ -119,7 +119,7 @@ You may also include 2–4 short bullet points covering:
 ```
 
 ### Output File
-- `rebranding.md`
+- `{userid}_rebranding.md`
 
 ### Recommended Structure for `rebranding.md`
 
@@ -168,9 +168,9 @@ You may also include 2–4 short bullet points covering:
 
 Recommended files for the project repository:
 
-- `USER_PROFILE.md`
-- `PRODUCTS.md`
-- `revenue_detection.csv`
-- `rebranding.md`
+- `{userid}_USER_PROFILE.md`
+- `{userid}_PRODUCTS.md`
+- `{userid}_revenue_detection.csv`
+- `{userid}_rebranding.md`
 - `AGENT02_PROMPTS.md`
 
