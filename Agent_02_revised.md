@@ -23,7 +23,7 @@ The output artifacts maintained by Agent 02 are:
 The overall workflow is illustrated below:
 
 <p align="center">
-  <img src="Agent 02/image.png" alt="Agent 02 Overall Architecture" width="720"/>
+  <img src="assets/image.png" alt="Agent 02 Overall Architecture" width="720"/>
 </p>
 
 ---
@@ -48,20 +48,20 @@ Agent 02 runs **two cron jobs** in total.
 ### OpenClaw Chain of Thought
 
 <p align="center">
-  <img src="Agent 02/image 1.png" alt="Cron Job 01 - OpenClaw Chain of Thought 1" width="48%"/>
-  <img src="Agent 02/image 2.png" alt="Cron Job 01 - OpenClaw Chain of Thought 2" width="48%"/>
+  <img src="assets/image 1.png" alt="Cron Job 01 - OpenClaw Chain of Thought 1" width="48%"/>
+  <img src="assets/image 2.png" alt="Cron Job 01 - OpenClaw Chain of Thought 2" width="48%"/>
 </p>
 
 ### WhatsApp Notification
 
 <p align="center">
-  <img src="Agent 02/image 3.png" alt="Cron Job 01 - WhatsApp" width="520"/>
+  <img src="assets/image 3.png" alt="Cron Job 01 - WhatsApp" width="520"/>
 </p>
 
 ### Prompt
 
 <p align="center">
-  <img src="Agent 02/image 4.png" alt="Cron Job 01 Prompt" width="680"/>
+  <img src="assets/image 4.png" alt="Cron Job 01 Prompt" width="680"/>
 </p>
 
 ```text
@@ -102,19 +102,19 @@ This cron job ensures that Agent 02 maintains an up-to-date revenue tracking fil
 ### OpenClaw Chain of Thought
 
 <p align="center">
-  <img src="Agent 02/image 5.png" alt="Cron Job 02 - OpenClaw Chain of Thought" width="680"/>
+  <img src="assets/image 5.png" alt="Cron Job 02 - OpenClaw Chain of Thought" width="680"/>
 </p>
 
 ### WhatsApp Notification
 
 <p align="center">
-  <img src="Agent 02/image 6.png" alt="Cron Job 02 - WhatsApp" width="520"/>
+  <img src="assets/image 6.png" alt="Cron Job 02 - WhatsApp" width="520"/>
 </p>
 
 ### Prompt
 
 <p align="center">
-  <img src="Agent 02/image 7.png" alt="Cron Job 02 Prompt" width="680"/>
+  <img src="assets/image 7.png" alt="Cron Job 02 Prompt" width="680"/>
 </p>
 
 ```text
@@ -178,13 +178,13 @@ Optional summary bullets may include:
 OpenClaw Bot can perform market research automatically by searching the Etsy platform.
 
 <p align="center">
-  <img src="Agent 02/image 8.png" alt="Etsy Market Research Example 1" width="48%"/>
-  <img src="Agent 02/image 9.png" alt="Etsy Market Research Example 2" width="48%"/>
+  <img src="assets/image 8.png" alt="Etsy Market Research Example 1" width="48%"/>
+  <img src="assets/image 9.png" alt="Etsy Market Research Example 2" width="48%"/>
 </p>
 
 <p align="center">
-  <img src="Agent 02/image 10.png" alt="Etsy Market Research Example 3" width="48%"/>
-  <img src="Agent 02/image 11.png" alt="Etsy Market Research Example 4" width="48%"/>
+  <img src="assets/image 10.png" alt="Etsy Market Research Example 3" width="48%"/>
+  <img src="assets/image 11.png" alt="Etsy Market Research Example 4" width="48%"/>
 </p>
 
 ---
