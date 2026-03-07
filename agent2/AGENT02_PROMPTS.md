@@ -4,8 +4,8 @@
 
 Agent 02 receives the following background documents from Agent 01:
 
-- `user.md`: brand, business, and seller profile
-- `product.md`: product catalog and listing information
+- `USER_PROFILE.md`: brand, business, and seller profile
+- `PRODUCTS.md`: product catalog and listing information
 
 Agent 02 runs two weekly cron jobs:
 
@@ -17,7 +17,7 @@ Agent 02 runs two weekly cron jobs:
 ## General Rules
 
 - Use the workspace files as the source of truth.
-- Read `user.md` and `product.md` before taking action.
+- Read `USER_PROFILE.md` and `PRODUCTS.md` before taking action.
 - Keep file names exactly as specified.
 - Do not overwrite useful historical data unnecessarily.
 - Always record the latest update timestamp for created or modified outputs.
@@ -34,8 +34,8 @@ Collect the latest weekly financial performance data for the user’s shop(s) an
 ### Prompt
 
 ```text
-Read `user.md` in the workspace to understand the brand and seller profile.
-Then read `product.md` to review the current product catalog.
+Read `USER_PROFILE.md` in the workspace to understand the brand and seller profile.
+Then read `PRODUCTS.md` to review the current product catalog.
 
 Contact the user and request the latest financial metrics for their shop(s). Collect, at minimum, the following information for each product or shop where available:
 - product listing / product name
@@ -82,8 +82,8 @@ Research the market across major selling platforms, benchmark competitors, and g
 ### Prompt
 
 ```text
-Read `user.md` in the workspace to understand the brand profile, target audience, and positioning.
-Then read `product.md` to understand the product catalog and core product categories.
+Read `USER_PROFILE.md` in the workspace to understand the brand profile, target audience, and positioning.
+Then read `PRODUCTS.md` to understand the product catalog and core product categories.
 
 Research comparable products across Etsy, Shopify stores, Instagram shops, Google Shopping, and Amazon for the relevant product categories.
 
@@ -168,8 +168,8 @@ You may also include 2–4 short bullet points covering:
 
 Recommended files for the project repository:
 
-- `user.md`
-- `product.md`
+- `USER_PROFILE.md`
+- `PRODUCTS.md`
 - `revenue_detection.csv`
 - `rebranding.md`
 - `AGENT02_PROMPTS.md`
