@@ -1,18 +1,8 @@
-# Hi! We are Loom 🧶
-Imperial * OpenClaw Agent Hackathon
-
-<p align="center">
-  <img src="assets/image 21.png" alt="Agent 02 Overall Architecture" width="720"/>
-</p>
-
 # Artisan Agent 🌿
 
-A two-agent WhatsApp system for independent craftspeople built on OpenClaw🦞 and Flock.io. Agent 1 onboards makers via WhatsApp and generates brand profiles and e-commerce listings. Agent 2 runs weekly on a cron to scrape competitor data, collect sales metrics, and deliver personalised market intelligence newsletters back through WhatsApp.
+A two-agent WhatsApp system for independent craftspeople. Agent 1 is a WhatsApp bot that onboards makers and generates brand profiles and e-commerce listings. Agent 2 is an OpenClaw cron agent that reads those files weekly to run market research, collect sales metrics, and deliver personalised newsletters back through WhatsApp.
 
-# Live Demo and Deck
-
-https://docs.google.com/presentation/d/1aCpUBQfBsGO4emhvBzis_PxDB-ebpr-CGVodXzIS33s/edit?usp=sharing
-https://youtu.be/x1LHlCCWAac
+No shared database required — both agents communicate entirely through files.
 
 ---
 
@@ -22,68 +12,40 @@ https://youtu.be/x1LHlCCWAac
 ┌─────────────────────────────────────────────────────────────────┐
 │                        AGENT 1 — WhatsApp Bot                   │
 │                          bot.js  ·  photoAgent.js               │
+│                          Node.js process                         │
 │                                                                  │
 │  User sends photos + answers questions via WhatsApp             │
 │       ↓                                                          │
 │  Vision analysis (Gemini) → Brand positioning (Qwen3)           │
 │  → E-commerce listing (Qwen3) → AI product photo (Gemini)       │
 │       ↓                                                          │
-│  Writes → USER_PROFILE.md  ·  PRODUCTS.md  (markdownExporter)   │
-│  Writes → brands table  ·  listings table  (Supabase)*          │
+│  Writes per user:                                                │
+│    {id}.json · {id}_products.json          (source of truth)    │
+│    {id}_USER_PROFILE.md · {id}_PRODUCTS.md (markdown export)    │
 └───────────────────────┬─────────────────────────────────────────┘
-                        │ shared via local files (or DB if remote)
+                        │ markdown files passed to Agent 2
 ┌───────────────────────▼─────────────────────────────────────────┐
 │                        AGENT 2 — Research Agent                 │
-│                          agent2.js  ·  researchAgent.js         │
-│                          Runs weekly via cron                    │
+│                          OpenClaw cron tasks                     │
+│                          Runs weekly, no JS files                │
+│                                                                  │
+│  Reads:  {id}_USER_PROFILE.md · {id}_PRODUCTS.md                │
+│  Config: AGENT02_PROMPTS.md                                      │
 │                                                                  │
 │  CRON TASK 1 — Revenue Detection                                │
 │    → Messages each user via WhatsApp asking for weekly metrics  │
 │    → User replies with sales data                               │
-│    → Agent 2 parses reply + updates revenue_detection.csv       │
+│    → Writes/updates user{n}_revenue_detection.csv               │
 │                                                                  │
 │  CRON TASK 2 — Market Research                                  │
 │    → Scrapes Etsy / Shopify / Instagram / Google Shopping /     │
 │       Amazon for competitor pricing and trend signals           │
-│    → Cross-references revenue_detection.csv                     │
-│    → Updates rebranding.md with benchmarks + signals            │
-│    → Generates personalised newsletter per user                 │
-│    → Writes to newsletter_queue table (Supabase)*               │
-│      or newsletter_queue.json (local)                           │
-└───────────────────────┬─────────────────────────────────────────┘
-                        │ reads newsletter_queue
-┌───────────────────────▼─────────────────────────────────────────┐
-│           AGENT 1 — newsletter_inbox mode                        │
-│    → Polls newsletter_queue on startup / scheduled check        │
-│    → Delivers weekly summary to each user via WhatsApp          │
-│    → Marks messages sent / failed                               │
+│    → Cross-references user{n}_revenue_detection.csv             │
+│    → Writes/updates user{n}_rebranding.md                       │
+│    → Generates personalised newsletter                          │
+│    → Queues WhatsApp delivery back through Agent 1              │
 └─────────────────────────────────────────────────────────────────┘
-
-* Supabase only required when agents run on separate servers.
-  When running locally, both agents share the profiles/ folder directly.
 ```
-
----
-
-## Deployment Modes
-
-### Local (recommended for getting started)
-
-Both agents run on the same machine. They share data through the `profiles/` folder — no database needed.
-
-- Agent 1 writes `{id}.json`, `{id}_products.json`, `{id}_USER_PROFILE.md`, `{id}_PRODUCTS.md`
-- Agent 2 reads those files directly from `profiles/`
-- Newsletter queue is handled via a local `newsletter_queue.json` file
-- No Supabase setup required
-
-### Remote (production / multi-server)
-
-Agents run on separate machines (e.g. Agent 1 on a VPS, Agent 2 on a separate cron server). A shared Supabase database replaces the local file store.
-
-- Agent 1 writes to `brands`, `listings`, `users` tables in Supabase
-- Agent 2 reads from those tables and writes to `newsletter_queue`
-- Agent 1 polls `newsletter_queue` to deliver newsletters
-- Requires `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in `.env`
 
 ---
 
@@ -91,26 +53,32 @@ Agents run on separate machines (e.g. Agent 1 on a VPS, Agent 2 on a separate cr
 
 ```
 artisan-agent/
-├── bot.js                    # Agent 1 — WhatsApp session + conversation flow
-├── photoAgent.js             # AI calls: vision, brand positioning, listing, image gen
-├── markdownExporter.js       # Auto-generates .md files from JSON profiles
-├── agent2.js                 # Agent 2 — weekly cron: research + newsletter generation
-├── researchAgent.js          # Scraping + analysis logic (plug in your own)
-├── db.js                     # Shared Supabase DB module (remote mode only)
-├── schema.sql                # Postgres schema — remote mode only
 │
-├── profiles/                 # Created automatically — one folder shared by both agents
-│   ├── {id}.json
-│   ├── {id}_products.json
-│   ├── {id}_USER_PROFILE.md
-│   └── {id}_PRODUCTS.md
+│── AGENT 1 (Node.js) ──────────────────────────────────────────
+├── bot.js                      # WhatsApp session + conversation flow
+├── photoAgent.js               # AI calls: vision, positioning, listing, image gen
+├── markdownExporter.js         # Auto-generates .md files on every profile/product save
 │
-├── newsletter_queue.json     # Local newsletter queue (local mode only)
-├── revenue_detection.csv     # Updated by Agent 2 with weekly user-reported sales
-├── rebranding.md             # Updated by Agent 2 with market research + trend signals
+│── AGENT 2 (OpenClaw cron) ────────────────────────────────────
+├── AGENT02_PROMPTS.md          # Prompt config for Agent 2 cron tasks
 │
-├── .env                      # API keys — never commit
-├── .wwebjs_auth/             # WhatsApp session cache — created on first QR scan
+│── SHARED FILES ───────────────────────────────────────────────
+├── profiles/                   # Created automatically by Agent 1
+│   ├── {id}.json               # Brand profile — source of truth
+│   ├── {id}_products.json      # Product listing log — source of truth
+│   ├── {id}_USER_PROFILE.md    # Read by Agent 2
+│   └── {id}_PRODUCTS.md        # Read by Agent 2
+│
+│── AGENT 2 OUTPUTS ────────────────────────────────────────────
+├── user01_revenue_detection.csv
+├── user01_rebranding.md
+├── user02_revenue_detection.csv
+├── user02_rebranding.md
+│   ...                         # One pair of files per user
+│
+│── CONFIG ─────────────────────────────────────────────────────
+├── .env                        # API keys — never commit
+├── .wwebjs_auth/               # WhatsApp session cache
 └── package.json
 ```
 
@@ -122,7 +90,7 @@ artisan-agent/
 - **Google Chrome or Chromium** — used by Puppeteer to run WhatsApp Web
 - A **WhatsApp account** to link as the bot number
 - API keys for **Flock** and **Google Gemini**
-- **Supabase** — only needed for remote/multi-server deployment (see above)
+- **OpenClaw** — for running Agent 2 cron tasks
 
 ---
 
@@ -150,11 +118,8 @@ This installs:
 | `axios` | HTTP requests to Flock and Gemini APIs |
 | `dotenv` | Environment variable loader |
 | `puppeteer` | Headless browser for WhatsApp Web |
-| `@supabase/supabase-js` | Shared database client (remote mode only) |
 
 ### 3. Create your `.env` file
-
-**Local mode** — only AI keys needed:
 
 ```env
 # Flock — vision analysis + text generation
@@ -165,41 +130,14 @@ FLOCK_BASE_URL=https://api.flock.io/v1
 GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
-**Remote mode** — add Supabase credentials:
-
-```env
-FLOCK_API_KEY=your_flock_api_key_here
-FLOCK_BASE_URL=https://api.flock.io/v1
-
-GEMINI_API_KEY=your_gemini_api_key_here
-
-# Supabase — shared database (remote mode only)
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here
-```
-
 Where to get each key:
 
 - **Flock** — from your Flock dashboard. Provides access to `gemini-3-flash-preview` (vision) and `qwen3-235b-a22b-instruct-2507` (text)
 - **Gemini** — from [aistudio.google.com](https://aistudio.google.com). Used directly for `gemini-3.1-flash-image-preview` image generation
-- **Supabase** _(remote only)_ — from your Supabase project under **Settings → API**. Use the service role key, not the anon key — it's only used server-side
 
 > ⚠️ Never commit `.env`. Add it to `.gitignore`.
 
-### 4. Database setup (remote mode only)
-
-In your Supabase project, open the **SQL Editor** and run the contents of `schema.sql`. This creates four tables:
-
-| Table | Purpose |
-|---|---|
-| `users` | One row per WhatsApp number, tracks onboarding status |
-| `brands` | Brand profile, positioning, and history per user |
-| `listings` | All product listings with AI-generated content |
-| `newsletter_queue` | Messages queued by Agent 2, delivered by Agent 1 |
-
-Skip this step entirely if running locally.
-
-### 5. Run Agent 1 (WhatsApp Bot)
+### 4. Run Agent 1
 
 ```bash
 node bot.js
@@ -215,23 +153,13 @@ Once linked:
 
 The session is saved to `.wwebjs_auth/` — you won't need to scan again unless you unlink the device or delete the folder.
 
-### 6. Run Agent 2 (Research Cron)
+Every time a user saves a profile or listing, Agent 1 automatically writes their `_USER_PROFILE.md` and `_PRODUCTS.md` to `profiles/`. These are the files Agent 2 reads.
 
-Agent 2 can be run manually or scheduled via cron. It reads from `profiles/` (local mode) or Supabase (remote mode).
+### 5. Set up Agent 2 (OpenClaw)
 
-**Manual run:**
-```bash
-node agent2.js
-```
+Agent 2 has no JS files — it runs entirely as OpenClaw cron tasks configured via `AGENT02_PROMPTS.md`.
 
-**Weekly cron (every Monday at 8am):**
-```bash
-crontab -e
-```
-Add:
-```
-0 8 * * 1 cd /path/to/artisan-agent && node agent2.js >> logs/agent2.log 2>&1
-```
+Set up the two cron tasks in OpenClaw pointing at your project directory. Agent 2 reads `profiles/{id}_USER_PROFILE.md` and `profiles/{id}_PRODUCTS.md` for each user and writes its output files (`user{n}_revenue_detection.csv`, `user{n}_rebranding.md`) back to the project root.
 
 ---
 
@@ -256,7 +184,7 @@ Welcome → Consent → Name → Brand name → Brand location → Brand story
 → Workspace photo (optional)
 → Hours · Materials · Positioning preference
 → 3 brand profiles generated → User chooses one
-→ Profile saved + markdown exported
+→ Profile saved + USER_PROFILE.md and PRODUCTS.md exported
 ```
 
 ### Returning user menu
@@ -275,60 +203,40 @@ Send photos → Extra close-ups (optional)
 → Full listing generated (title, description, tags, price, photo tips)
 → AI product photo generated
 → Save or request edits
-→ Saved + markdown exported
-```
-
-### Newsletter inbox (triggered by Agent 2 queue)
-```
-Agent 2 writes newsletter to queue
-→ Agent 1 polls queue on startup / scheduled interval
-→ Delivers message to user via WhatsApp
-→ Marks as sent
+→ Saved + PRODUCTS.md exported
 ```
 
 ---
 
 ## Agent 2 — Cron Tasks
 
+Both tasks are configured in `AGENT02_PROMPTS.md` and run via OpenClaw.
+
 ### Task 1 — Revenue Detection
-Sends each onboarded user a WhatsApp message asking for their weekly sales metrics. When the user replies, Agent 2 parses the response and appends a new row to `revenue_detection.csv`.
+Sends each onboarded user a WhatsApp message asking for their weekly sales metrics. Parses the reply and writes/updates `user{n}_revenue_detection.csv` with the new data.
 
 ### Task 2 — Market Research
-Scrapes Etsy, Shopify, Instagram, Google Shopping, and Amazon for:
+Reads each user's `_USER_PROFILE.md` and `_PRODUCTS.md`, then scrapes Etsy, Shopify, Instagram, Google Shopping, and Amazon for:
 - Competitor pricing in the user's craft category and positioning tier
-- Trend signals — rising search tags, emerging product formats, seasonal demand
+- Trend signals — rising search tags, new product formats, seasonal demand
 
-Cross-references scraped data against `revenue_detection.csv` to identify pricing gaps and opportunities. Updates `rebranding.md` with benchmarks and signals per brand, then generates a personalised newsletter queued for WhatsApp delivery.
+Cross-references findings against `user{n}_revenue_detection.csv`, updates `user{n}_rebranding.md` with benchmarks and signals, and queues a personalised newsletter for WhatsApp delivery via Agent 1.
 
 ---
 
-## Data & Files
+## File Handoff Between Agents
 
-### Shared between agents (local mode — `profiles/`)
+```
+Agent 1 writes                    Agent 2 reads
+──────────────────────────────────────────────────────
+profiles/{id}_USER_PROFILE.md  →  brand identity, positioning, story
+profiles/{id}_PRODUCTS.md      →  listing history, materials, pricing
 
-| File | Written by | Read by |
-|---|---|---|
-| `{id}.json` | Agent 1 | Agent 2 |
-| `{id}_products.json` | Agent 1 | Agent 2 |
-| `{id}_USER_PROFILE.md` | `markdownExporter.js` | Agent 2 |
-| `{id}_PRODUCTS.md` | `markdownExporter.js` | Agent 2 |
-| `newsletter_queue.json` | Agent 2 | Agent 1 |
-
-### Shared between agents (remote mode — Supabase)
-
-| Table | Written by | Read by |
-|---|---|---|
-| `users` | Agent 1 | Agent 2 |
-| `brands` | Agent 1 | Agent 2 |
-| `listings` | Agent 1 | Agent 2 |
-| `newsletter_queue` | Agent 2 | Agent 1 |
-
-### Agent 2 output files (both modes)
-
-| File | Contents |
-|---|---|
-| `revenue_detection.csv` | Weekly sales data per user, updated from WhatsApp replies |
-| `rebranding.md` | Market research findings, pricing benchmarks, trend signals per brand |
+Agent 2 writes                    Agent 2 reads (next run)
+──────────────────────────────────────────────────────
+user{n}_revenue_detection.csv  →  sales trends over time
+user{n}_rebranding.md          →  market benchmarks + signals
+```
 
 ---
 
@@ -359,22 +267,17 @@ node bot.js
 **Gemini image generation fails**
 - Confirm `GEMINI_API_KEY` is set in `.env`
 - The key must have access to `gemini-3.1-flash-image-preview` in Google AI Studio
-- Image generation failures are non-fatal — the listing text is delivered and the photo step is skipped with a warning
+- Failures are non-fatal — the listing text is delivered and the photo step is skipped with a warning
 
 **Flock API errors**
 - Check `FLOCK_API_KEY` and `FLOCK_BASE_URL` are correct
 - Confirm your Flock account has access to both `gemini-3-flash-preview` and `qwen3-235b-a22b-instruct-2507`
 
-**Supabase connection errors** _(remote mode only)_
-- Confirm `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are correct
-- Use the **service role key**, not the anon/public key
-- Check that `schema.sql` has been run in the Supabase SQL editor
-
 **Bot stops mid-conversation**
 The user can send `restart` to reset their session, or `menu` if already onboarded.
 
-**Agent 2 skips a user**
-In remote mode, check the terminal log for `⚠️ Skipping {phone} — no brand profile`. This means the user started onboarding but no brand row was written to Supabase yet. In local mode, check that `profiles/{id}.json` exists and contains `"onboarded": true`.
+**Agent 2 can't find a user's files**
+Confirm that `profiles/{id}_USER_PROFILE.md` and `profiles/{id}_PRODUCTS.md` exist. These are only written after a user completes onboarding and saves their first profile. Check that Agent 1 ran `markdownExporter` successfully by looking for the `📄 Profile MD exported` log line.
 
 ---
 
@@ -385,13 +288,11 @@ In remote mode, check the terminal log for `⚠️ Skipping {phone} — no brand
 .wwebjs_auth/
 node_modules/
 profiles/
-newsletter_queue.json
-revenue_detection.csv
-rebranding.md
-logs/
+user*_revenue_detection.csv
+user*_rebranding.md
 ```
 
-> `profiles/`, `newsletter_queue.json`, and `revenue_detection.csv` contain personal user data — do not commit them.
+> `profiles/` and the Agent 2 output files contain personal user data — do not commit them.
 
 ---
 
