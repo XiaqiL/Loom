@@ -22,35 +22,38 @@ https://youtu.be/x1LHlCCWAac
 ┌─────────────────────────────────────────────────────────────────┐
 │                        AGENT 1 — WhatsApp Bot                   │
 │                          bot.js  ·  photoAgent.js               │
-│                          Node.js process                         │
-│                                                                  │
+│                          Node.js process                        │
+│                                                                 │
 │  User sends photos + answers questions via WhatsApp             │
-│       ↓                                                          │
+│       ↓                                                         │
 │  Vision analysis (Gemini) → Brand positioning (Qwen3)           │
 │  → E-commerce listing (Qwen3) → AI product photo (Gemini)       │
-│       ↓                                                          │
-│  Writes per user:                                                │
+│       ↓                                                         │
+│  Writes per user:                                               │
 │    {id}.json · {id}_products.json          (source of truth)    │
 │    {id}_USER_PROFILE.md · {id}_PRODUCTS.md (markdown export)    │
 └───────────────────────┬─────────────────────────────────────────┘
                         │ markdown files passed to Agent 2
 ┌───────────────────────▼─────────────────────────────────────────┐
 │                        AGENT 2 — Research Agent                 │
-│                          OpenClaw cron tasks                     │
-│                          Runs weekly, no JS files                │
-│                                                                  │
+│                          OpenClaw cron tasks                    │
+│                          Runs weekly, no JS files               │
+│                                                                 │
 │  Reads:  {id}_USER_PROFILE.md · {id}_PRODUCTS.md                │
-│  Config: AGENT02_PROMPTS.md                                      │
-│                                                                  │
+│  Config: AGENT02_PROMPTS.md                                     │
+│                                                                 │
 │  CRON TASK 1 — Revenue Detection                                │
 │    → Messages each user via WhatsApp asking for weekly metrics  │
 │    → User replies with sales data                               │
 │    → Writes/updates user{n}_revenue_detection.csv               │
-│                                                                  │
-│  CRON TASK 2 — Market Research                                  │
+│                                                                 │
+│  CRON TASK 2 — Market Research + CV Similarity Check            │
 │    → Scrapes Etsy / Shopify / Instagram / Google Shopping /     │
 │       Amazon for competitor pricing and trend signals           │
 │    → Cross-references user{n}_revenue_detection.csv             │
+│    → Runs `app.py` CV workflow on product images when present   │
+│    → Checks image similarity for fraud/originality risk         │
+│    → Estimates price range from visually similar products       │
 │    → Writes/updates user{n}_rebranding.md                       │
 │    → Generates personalised newsletter                          │
 │    → Queues WhatsApp delivery back through Agent 1              │
@@ -226,11 +229,39 @@ Both tasks are configured in `AGENT02_PROMPTS.md` and run via OpenClaw.
 Sends each onboarded user a WhatsApp message asking for their weekly sales metrics. Parses the reply and writes/updates `user{n}_revenue_detection.csv` with the new data.
 
 ### Task 2 — Market Research
-Reads each user's `_USER_PROFILE.md` and `_PRODUCTS.md`, then scrapes Etsy, Shopify, Instagram, Google Shopping, and Amazon for:
+Reads each user's `_USER_PROFILE.md` and `_PRODUCTS.md`, then researches Etsy, Shopify, Instagram, Google Shopping, and Amazon for:
+
 - Competitor pricing in the user's craft category and positioning tier
 - Trend signals — rising search tags, new product formats, seasonal demand
+- Top seller patterns in colour, fabric, material, and visual positioning
 
-Cross-references findings against `user{n}_revenue_detection.csv`, updates `user{n}_rebranding.md` with benchmarks and signals, and queues a personalised newsletter for WhatsApp delivery via Agent 1.
+It then cross-references these findings against `user{n}_revenue_detection.csv` **and** runs a CV-based image workflow from `app.py` when usable product images are available.
+
+The CV-based step adds:
+
+- **Fraud / similarity detection** — checks whether a product image is visually too close to existing market references using image similarity
+- **Visual pricing support** — estimates a reference price and price band based on visually similar products
+- **Confidence adjustment** — lowers confidence when image quality is weak (for example low sharpness or poor brightness)
+
+The combined output is written into `user{n}_rebranding.md` and used to generate a more personalised weekly newsletter for WhatsApp delivery via Agent 1.
+
+#### CV-based workflow inside Task 2
+When product images are available, Agent 2 also:
+
+1. Generates image embeddings for the user's product image  
+2. Compares them against a gallery/reference image set  
+3. Retrieves the top visually similar products  
+4. Uses matched product pricing data to estimate a weighted reference price  
+5. Produces a suggested visual price range with a confidence score  
+6. Flags high visual similarity for manual review as a potential fraud/originality risk signal  
+
+This CV-based output is treated as **decision support**, not absolute truth. Agent 2 does **not** make legal infringement claims or definitive fraud accusations. Instead, it uses practical business labels such as:
+
+- low similarity risk
+- moderate similarity risk
+- high similarity risk — review recommended
+
+If no usable images are available, Task 2 continues normally with market research only.
 
 ---
 
